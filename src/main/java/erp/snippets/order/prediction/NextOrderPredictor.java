@@ -42,7 +42,7 @@ public class NextOrderPredictor {
         averageDifference = averageDifference / (orders.size() - 1);
         long difference = Math.round(averageDifference);
 
-        return LocalDateTime.now().plus(
+        return orders.getLast().getTimestamp().plus(
             difference,
             differenceUnit
         ).toLocalDate();
