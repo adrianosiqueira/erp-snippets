@@ -18,22 +18,10 @@ class NextOrderPredictorTest {
     private final NextOrderPredictor nextOrderPredictor = new NextOrderPredictor();
 
     private static Stream<Arguments> getResultTests() {
-        ArrayList<Order> list1 = new ArrayList<>(List.of(
-            Order.builder().timestamp(LocalDateTime.of(2024, Month.JANUARY, 5, 8, 0)).build(),
-            Order.builder().timestamp(LocalDateTime.of(2024, Month.JANUARY, 1, 8, 0)).build(),
-            Order.builder().timestamp(LocalDateTime.of(2024, Month.JANUARY, 12, 8, 0)).build()
-        ));
-
-        ArrayList<Order> list2 = new ArrayList<>(List.of(
-            Order.builder().timestamp(LocalDateTime.of(2024, Month.JANUARY, 1, 8, 0)).build(),
-            Order.builder().timestamp(LocalDateTime.of(2024, Month.JANUARY, 10, 8, 0)).build(),
-            Order.builder().timestamp(LocalDateTime.of(2024, Month.JANUARY, 20, 8, 0)).build()
-        ));
-
         return Stream
             .<Arguments>builder()
-            .add(Arguments.of(list1, LocalDate.of(2024, Month.JANUARY, 18)))
-            .add(Arguments.of(list2, LocalDate.of(2024, Month.JANUARY, 30)))
+            .add(Arguments.of(ListFactory.getListSet1(), LocalDate.of(2024, Month.JANUARY, 30)))
+            .add(Arguments.of(ListFactory.getListSet2(), LocalDate.of(2024, Month.JANUARY, 18)))
             .build();
     }
 
@@ -42,5 +30,25 @@ class NextOrderPredictorTest {
     void predictNextOrder(List<Order> input, LocalDate expected) {
         assertThat(nextOrderPredictor.predictNextOrder(input))
             .isEqualTo(expected);
+    }
+
+
+    private static class ListFactory {
+
+        private static ArrayList<Order> getListSet1() {
+            return new ArrayList<>(List.of(
+                Order.builder().timestamp(LocalDateTime.of(2024, Month.JANUARY, 1, 8, 0)).build(),
+                Order.builder().timestamp(LocalDateTime.of(2024, Month.JANUARY, 10, 8, 0)).build(),
+                Order.builder().timestamp(LocalDateTime.of(2024, Month.JANUARY, 20, 8, 0)).build()
+            ));
+        }
+
+        private static ArrayList<Order> getListSet2() {
+            return new ArrayList<>(List.of(
+                Order.builder().timestamp(LocalDateTime.of(2024, Month.JANUARY, 5, 8, 0)).build(),
+                Order.builder().timestamp(LocalDateTime.of(2024, Month.JANUARY, 1, 8, 0)).build(),
+                Order.builder().timestamp(LocalDateTime.of(2024, Month.JANUARY, 12, 8, 0)).build()
+            ));
+        }
     }
 }
