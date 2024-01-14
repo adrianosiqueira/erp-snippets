@@ -15,10 +15,10 @@ public class NextOrderPredictor {
         return list.size() < 2;
     }
 
-    public LocalDate predictNextOrder(List<Order> orders) {
+    public LocalDate predictNextOrder(List<Order> orders)
+    throws UnsupportedOperationException {
         if (hasInsufficientItems(orders)) {
-            log.error("At least 2 orders are needed to predict the next order");
-            return LocalDate.now();
+            throw new UnsupportedOperationException("At least 2 orders are needed to predict the next order");
         }
 
         /*
