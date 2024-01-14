@@ -8,14 +8,24 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class NextOrderPredictorTest {
 
     private final NextOrderPredictor nextOrderPredictor = new NextOrderPredictor();
+
+    private static Stream<Arguments> getExceptionTests() {
+        return Stream
+            .<Arguments>builder()
+            .add(Arguments.of(null, NullPointerException.class))
+            .add(Arguments.of(Collections.emptyList(), UnsupportedOperationException.class))
+            .build();
+    }
 
     private static Stream<Arguments> getResultTests() {
         return Stream
@@ -24,6 +34,14 @@ class NextOrderPredictorTest {
             .add(Arguments.of(ListFactory.getListSet2(), LocalDate.of(2024, Month.JANUARY, 18)))
             .add(Arguments.of(ListFactory.getListSet3(), LocalDate.of(2024, Month.JANUARY, 26)))
             .build();
+    }
+
+
+    @ParameterizedTest
+    @MethodSource("getExceptionTests")
+    void predictNextOrder(List<Order> input, Class<? extends Throwable> expected) {
+        assertThatThrownBy(() -> nextOrderPredictor.predictNextOrder(input))
+            .isInstanceOf(expected);
     }
 
     @ParameterizedTest
