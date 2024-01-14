@@ -3,7 +3,7 @@ package erp.snippets.dialog.credential;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-public class CredentialMaiClass extends Application {
+public class CredentialMainClass extends Application {
 
     public static void main(String[] args) {
         Application.launch();
