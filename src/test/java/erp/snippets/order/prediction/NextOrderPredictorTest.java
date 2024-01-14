@@ -22,6 +22,7 @@ class NextOrderPredictorTest {
             .<Arguments>builder()
             .add(Arguments.of(ListFactory.getListSet1(), LocalDate.of(2024, Month.JANUARY, 30)))
             .add(Arguments.of(ListFactory.getListSet2(), LocalDate.of(2024, Month.JANUARY, 18)))
+            .add(Arguments.of(ListFactory.getListSet3(), LocalDate.of(2024, Month.JANUARY, 26)))
             .build();
     }
 
@@ -48,6 +49,18 @@ class NextOrderPredictorTest {
                 Order.builder().timestamp(LocalDateTime.of(2024, Month.JANUARY, 5, 8, 0)).build(),
                 Order.builder().timestamp(LocalDateTime.of(2024, Month.JANUARY, 1, 8, 0)).build(),
                 Order.builder().timestamp(LocalDateTime.of(2024, Month.JANUARY, 12, 8, 0)).build()
+            ));
+        }
+
+        private static ArrayList<Order> getListSet3() {
+            return new ArrayList<>(List.of(
+                Order.builder().timestamp(LocalDateTime.of(2024, Month.JANUARY, 1, 8, 0)).build(),
+                Order.builder().timestamp(LocalDateTime.of(2024, Month.JANUARY, 4, 8, 0)).build(),
+                Order.builder().timestamp(LocalDateTime.of(2024, Month.JANUARY, 9, 8, 0)).build(),
+                Order.builder().timestamp(LocalDateTime.of(2024, Month.JANUARY, 13, 8, 0)).build(),
+                Order.builder().timestamp(LocalDateTime.of(2024, Month.JANUARY, 15, 8, 0)).build(),
+                Order.builder().timestamp(LocalDateTime.of(2024, Month.JANUARY, 19, 8, 0)).build(),
+                Order.builder().timestamp(LocalDateTime.of(2024, Month.JANUARY, 22, 8, 0)).build()
             ));
         }
     }
