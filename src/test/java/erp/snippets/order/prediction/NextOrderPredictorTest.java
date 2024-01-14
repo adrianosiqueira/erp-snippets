@@ -22,7 +22,7 @@ class NextOrderPredictorTest {
     private static Stream<Arguments> getExceptionTests() {
         return Stream
             .<Arguments>builder()
-            .add(Arguments.of(null, NullPointerException.class))
+            .add(Arguments.of(null, IllegalArgumentException.class))
             .add(Arguments.of(Collections.emptyList(), UnsupportedOperationException.class))
             .build();
     }

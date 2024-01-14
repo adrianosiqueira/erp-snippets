@@ -34,6 +34,12 @@ public class NextOrderPredictor {
             .limit(3)
             .sorted(ascending)
             .toList();
+    private boolean isNull(List<?> list) {
+        return list == null;
+    }
+    public LocalDate predictNextOrder(List<Order> orders)
+    throws IllegalArgumentException, UnsupportedOperationException {
+        if (isNull(orders)) throw new IllegalArgumentException("Order list cannot be null");
 
         double averageDifference = (double) TIME_UNIT.between(
             orders.getFirst().getTimestamp(),
