@@ -11,7 +11,7 @@ public class NextOrderPredictor {
 
     private static final ChronoUnit TIME_UNIT = ChronoUnit.DAYS;
 
-    private List<Order> getLastThreeOrders(List<Order> orders) {
+    private List<Order> getLatestOrders(List<Order> orders) {
         /*
          * Only the last three orders are used in the
          * calculation, and they must be ascending sorted
@@ -40,7 +40,7 @@ public class NextOrderPredictor {
         if (isNull(orders)) throw new IllegalArgumentException("Order list cannot be null");
         if (hasInsufficientItems(orders)) throw new UnsupportedOperationException("At least 2 orders are needed to predict the next order");
 
-        orders = getLastThreeOrders(orders);
+        orders = getLatestOrders(orders);
 
         double averageDifference = (double) TIME_UNIT.between(
             orders.getFirst().getTimestamp(),
