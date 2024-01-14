@@ -9,6 +9,8 @@ import java.util.List;
 @Slf4j
 public class NextOrderPredictor {
 
+    private static final ChronoUnit TIME_UNIT = ChronoUnit.DAYS;
+
     private boolean hasInsufficientItems(List<?> list) {
         return list.size() < 2;
     }
@@ -25,16 +27,14 @@ public class NextOrderPredictor {
          */
         orders.sort(new OrderTimeSortAscending());
 
-        ChronoUnit differenceUnit = ChronoUnit.DAYS;
-
-        double averageDifference = (double) differenceUnit.between(
+        double averageDifference = (double) TIME_UNIT.between(
             orders.getFirst().getTimestamp(),
             orders.getLast().getTimestamp()
         ) / (orders.size() - 1);
 
         return orders.getLast().getTimestamp().plus(
             Math.round(averageDifference),
-            differenceUnit
+            TIME_UNIT
         ).toLocalDate();
     }
 }
