@@ -22,10 +22,18 @@ public class NextOrderPredictor {
         }
 
         /*
-         * The orders must be ascending sorted to prevent
-         * problems with negative average values.
+         * Only the last three orders are used in the
+         * calculation, and they must be ascending sorted
+         * to prevent issues with negative average values.
          */
-        orders.sort(new OrderTimeSortAscending());
+        OrderTimeSortAscending ascending = new OrderTimeSortAscending();
+
+        orders = orders
+            .stream()
+            .sorted(ascending.reversed())
+            .limit(3)
+            .sorted(ascending)
+            .toList();
 
         double averageDifference = (double) TIME_UNIT.between(
             orders.getFirst().getTimestamp(),
