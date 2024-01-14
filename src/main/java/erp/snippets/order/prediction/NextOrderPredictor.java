@@ -9,7 +9,8 @@ import java.util.List;
 @Slf4j
 public class NextOrderPredictor {
 
-    private static final ChronoUnit TIME_UNIT = ChronoUnit.DAYS;
+    private static final ChronoUnit TIME_UNIT   = ChronoUnit.DAYS;
+    private static final int        ORDER_COUNT = 3;
 
     private List<Order> getLatestOrders(List<Order> orders) {
         /*
@@ -22,7 +23,7 @@ public class NextOrderPredictor {
         return orders
             .stream()
             .sorted(ascending.reversed())
-            .limit(3)
+            .limit(ORDER_COUNT)
             .sorted(ascending)
             .toList();
     }
