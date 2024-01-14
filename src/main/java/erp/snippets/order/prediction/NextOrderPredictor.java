@@ -3,7 +3,6 @@ package erp.snippets.order.prediction;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -26,24 +25,15 @@ public class NextOrderPredictor {
          */
         orders.sort(new OrderTimeSortAscending());
 
-        ChronoUnit differenceUnit    = ChronoUnit.DAYS;
-        double     averageDifference = 0.0;
+        ChronoUnit differenceUnit = ChronoUnit.DAYS;
 
-        for (int i = 1; i < orders.size(); i++) {
-            Order previousOrder = orders.get(i - 1);
-            Order currentOrder  = orders.get(i);
-
-            averageDifference += differenceUnit.between(
-                previousOrder.getTimestamp(),
-                currentOrder.getTimestamp()
-            );
-        }
-
-        averageDifference = averageDifference / (orders.size() - 1);
-        long difference = Math.round(averageDifference);
+        double averageDifference = (double) differenceUnit.between(
+            orders.getFirst().getTimestamp(),
+            orders.getLast().getTimestamp()
+        ) / (orders.size() - 1);
 
         return orders.getLast().getTimestamp().plus(
-            difference,
+            Math.round(averageDifference),
             differenceUnit
         ).toLocalDate();
     }
