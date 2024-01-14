@@ -11,16 +11,7 @@ public class NextOrderPredictor {
 
     private static final ChronoUnit TIME_UNIT = ChronoUnit.DAYS;
 
-    private boolean hasInsufficientItems(List<?> list) {
-        return list.size() < 2;
-    }
-
-    public LocalDate predictNextOrder(List<Order> orders)
-    throws UnsupportedOperationException {
-        if (hasInsufficientItems(orders)) {
-            throw new UnsupportedOperationException("At least 2 orders are needed to predict the next order");
-        }
-
+    private List<Order> getLastThreeOrders(List<Order> orders) {
         /*
          * Only the last three orders are used in the
          * calculation, and they must be ascending sorted
@@ -28,18 +19,28 @@ public class NextOrderPredictor {
          */
         OrderTimeSortAscending ascending = new OrderTimeSortAscending();
 
-        orders = orders
+        return orders
             .stream()
             .sorted(ascending.reversed())
             .limit(3)
             .sorted(ascending)
             .toList();
+    }
+
+    private boolean hasInsufficientItems(List<?> list) {
+        return list.size() < 2;
+    }
+
     private boolean isNull(List<?> list) {
         return list == null;
     }
+
     public LocalDate predictNextOrder(List<Order> orders)
     throws IllegalArgumentException, UnsupportedOperationException {
         if (isNull(orders)) throw new IllegalArgumentException("Order list cannot be null");
+        if (hasInsufficientItems(orders)) throw new UnsupportedOperationException("At least 2 orders are needed to predict the next order");
+
+        orders = getLastThreeOrders(orders);
 
         double averageDifference = (double) TIME_UNIT.between(
             orders.getFirst().getTimestamp(),
