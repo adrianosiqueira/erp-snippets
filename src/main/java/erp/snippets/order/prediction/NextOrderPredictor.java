@@ -38,8 +38,11 @@ public class NextOrderPredictor {
 
     public LocalDate predictNextOrder(List<Order> orders)
     throws IllegalArgumentException, UnsupportedOperationException {
-        if (isNull(orders)) throw new IllegalArgumentException("Order list cannot be null");
-        if (hasInsufficientItems(orders)) throw new UnsupportedOperationException("At least 2 orders are needed to predict the next order");
+        if (isNull(orders)) {
+            throw new IllegalArgumentException("Order list cannot be null");
+        } else if (hasInsufficientItems(orders)) {
+            throw new AssertionError("At least 2 orders are needed to predict the next order");
+        }
 
         orders = getLatestOrders(orders);
 
