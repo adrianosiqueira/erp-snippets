@@ -74,7 +74,7 @@ public class NextOrderPredictor {
 
         SIZE(
             list -> list.size() < 2,
-            new UnsupportedOperationException("At least 2 orders are needed to predict the next order")
+            new UnsupportedOperationException("At least 2 orders are needed for prediction")
         );
 
         private final Predicate<List<?>> condition;
