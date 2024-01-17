@@ -17,6 +17,13 @@ public class NextOrderPredictor {
     private static final ChronoUnit TIME_UNIT   = ChronoUnit.DAYS;
     private static final int        ORDER_COUNT = 3;
 
+    private double calculateAverageInterval(List<Order> orders) {
+        return (double) TIME_UNIT.between(
+            orders.getFirst().getTimestamp(),
+            orders.getLast().getTimestamp()
+        ) / (orders.size() - 1);
+    }
+
     private void evaluate(List<?> list) {
         Stream
             .of(Evaluation.values())
@@ -47,14 +54,10 @@ public class NextOrderPredictor {
         evaluate(orders);
 
         orders = getLatestOrders(orders);
-
-        double averageDifference = (double) TIME_UNIT.between(
-            orders.getFirst().getTimestamp(),
-            orders.getLast().getTimestamp()
-        ) / (orders.size() - 1);
+        double averageInterval = calculateAverageInterval(orders);
 
         return orders.getLast().getTimestamp().plus(
-            Math.round(averageDifference),
+            Math.round(averageInterval),
             TIME_UNIT
         ).toLocalDate();
     }
