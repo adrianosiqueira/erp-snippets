@@ -1,16 +1,31 @@
 package erp.snippets.order.prediction;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 @Slf4j
 public class NextOrderPredictor {
 
     private static final ChronoUnit TIME_UNIT   = ChronoUnit.DAYS;
     private static final int        ORDER_COUNT = 3;
+
+    private void evaluate(List<?> list) {
+        Stream
+            .of(Evaluation.values())
+            .filter(evaluation -> evaluation.getCondition().test(list))
+            .findFirst()
+            .ifPresent(evaluation -> {
+                throw evaluation.getException();
+            });
+    }
 
     private List<Order> getLatestOrders(List<Order> orders) {
         /*
@@ -28,21 +43,8 @@ public class NextOrderPredictor {
             .toList();
     }
 
-    private boolean hasInsufficientItems(List<?> list) {
-        return list.size() < 2;
-    }
-
-    private boolean isNull(List<?> list) {
-        return list == null;
-    }
-
-    public LocalDate predictNextOrder(List<Order> orders)
-    throws IllegalArgumentException, UnsupportedOperationException {
-        if (isNull(orders)) {
-            throw new IllegalArgumentException("Order list cannot be null");
-        } else if (hasInsufficientItems(orders)) {
-            throw new UnsupportedOperationException("At least 2 orders are needed to predict the next order");
-        }
+    public LocalDate predictNextOrder(List<Order> orders) {
+        evaluate(orders);
 
         orders = getLatestOrders(orders);
 
@@ -55,5 +57,24 @@ public class NextOrderPredictor {
             Math.round(averageDifference),
             TIME_UNIT
         ).toLocalDate();
+    }
+
+
+    @RequiredArgsConstructor
+    @Getter
+    private enum Evaluation {
+
+        NULL(
+            Objects::isNull,
+            new IllegalArgumentException("Order list cannot be null")
+        ),
+
+        SIZE(
+            list -> list.size() < 2,
+            new UnsupportedOperationException("At least 2 orders are needed to predict the next order")
+        );
+
+        private final Predicate<List<?>> condition;
+        private final RuntimeException   exception;
     }
 }
