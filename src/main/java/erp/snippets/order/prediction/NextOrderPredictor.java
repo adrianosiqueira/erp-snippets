@@ -41,7 +41,7 @@ public class NextOrderPredictor {
         if (isNull(orders)) {
             throw new IllegalArgumentException("Order list cannot be null");
         } else if (hasInsufficientItems(orders)) {
-            throw new AssertionError("At least 2 orders are needed to predict the next order");
+            throw new UnsupportedOperationException("At least 2 orders are needed to predict the next order");
         }
 
         orders = getLatestOrders(orders);
